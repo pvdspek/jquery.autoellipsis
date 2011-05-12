@@ -346,7 +346,7 @@
      * @private
      */
     function textNodeFilter() {
-        return this.nodeType == Node.TEXT_NODE;
+        return this.nodeType === 3;
     }
 
     /**
