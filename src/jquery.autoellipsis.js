@@ -120,8 +120,11 @@
     function ellipsisOnElement(containerElement, settings) {
         var containerData = containerElement.data();
 
+	var wrapperElement;
+	
         // Check if wrapper div was already created and bound to the container element.
-        var wrapperElement = containerData.wrapperElement;
+	if(containerData != null) 	   
+    	   wrapperElement = containerData.wrapperElement;
 
         // If not, create wrapper element.
         if (!wrapperElement) {
@@ -129,8 +132,10 @@
         }
 
         // Check if the original wrapper element content was already bound to the wrapper element.
-        var wrapperElementData = wrapperElement.data();
-        var wrapperOriginalContent = wrapperElementData.originalContent;
+        var wrapperElementData = wrapperElement.data();        
+        var wrapperOriginalContent;
+        if(wrapperElementData)
+	        wrapperOriginalContent = wrapperElementData.originalContent;
 
         // If so, clone the original content, re-bind the original wrapper content to the clone, and replace the
         // wrapper with the clone.
