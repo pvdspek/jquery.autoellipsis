@@ -86,7 +86,6 @@
         settings = $.extend({}, defaultSettings, options);
 
         // If selector is not set, work on immediate children (default behaviour).
-        if (!selector) selector = '>*';
         settings.selector = selector;
 
         // Do ellipsis on each subject element.
@@ -159,7 +158,10 @@
         var deferAppendEllipsis = false;
 
         // Loop through all selected elements in reverse order.
-        $(wrapperElement.find(settings.selector).get().reverse()).each(function() {
+        var selectedElements = wrapperElement;
+        if (settings.selector) selectedElements = $(wrapperElement.find(settings.selector).get().reverse());
+
+        selectedElements.each(function() {
             var selectedElement = $(this),
                     originalText = selectedElement.text(),
                     ellipsisApplied = false;
