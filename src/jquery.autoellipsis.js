@@ -119,6 +119,9 @@
     function ellipsisOnElement(containerElement, settings) {
         var containerData = containerElement.data();
 
+        // data() might return undefined (at least according to jQuery docs)
+        if (!containerData) containerData = {};
+
         // Check if wrapper div was already created and bound to the container element.
         var wrapperElement = containerData.wrapperElement;
 
