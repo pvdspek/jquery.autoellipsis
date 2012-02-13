@@ -117,9 +117,7 @@
      * @private
      */
     function ellipsisOnElement(containerElement, settings) {
-        var containerData = containerElement.data();
-
-        // data() might return undefined (at least according to jQuery docs)
+        var containerData = containerElement.data('jqae');
         if (!containerData) containerData = {};
 
         // Check if wrapper div was already created and bound to the container element.
@@ -131,24 +129,26 @@
         }
 
         // Check if the original wrapper element content was already bound to the wrapper element.
-        var wrapperElementData = wrapperElement.data();
+        var wrapperElementData = wrapperElement.data('jqae');
+        if (!wrapperElementData) wrapperElementData = {};
+
         var wrapperOriginalContent = wrapperElementData.originalContent;
 
         // If so, clone the original content, re-bind the original wrapper content to the clone, and replace the
         // wrapper with the clone.
         if (wrapperOriginalContent) {
             wrapperElement = wrapperElementData.originalContent.clone(true)
-                    .data({originalContent: wrapperOriginalContent}).replaceAll(wrapperElement);
+                    .data('jqae', {originalContent: wrapperOriginalContent}).replaceAll(wrapperElement);
 
         } else {
             // Otherwise, clone the current wrapper element and bind it as original content to the wrapper element.
 
-            wrapperElement.data({originalContent: wrapperElement.clone(true)});
+            wrapperElement.data('jqae', {originalContent: wrapperElement.clone(true)});
         }
 
         // Bind the wrapper element and current container width and height to the container element. Current container
         // width and height are stored to detect changes to the container size.
-        containerElement.data({
+        containerElement.data('jqae', {
             wrapperElement: wrapperElement,
             containerWidth: containerElement.innerWidth(),
             containerHeight: containerElement.innerHeight()
@@ -274,7 +274,8 @@
         if (element.contents().length) {
 
             // Get last child node.
-            var lastNode = element.contents().last();
+            var contents = element.contents();
+            var lastNode = contents.eq(contents.length - 1);
 
             // If last node is a text node, return it.
             if (lastNode.filter(textNodeFilter).length) {
@@ -291,7 +292,8 @@
             // happen, as we test for emptiness before calling getLastTextNode.
 
             element.append('');
-            return element.contents().last();
+            var contents = element.contents();
+            return contents.eq(contents.length - 1);
         }
     }
 
@@ -306,7 +308,8 @@
         if (element.contents().length) {
 
             // Get last child node.
-            var lastNode = element.contents().last();
+            var contents = element.contents();
+            var lastNode = contents.eq(contents.length - 1);
 
             // If last child node is a text node, check for emptiness.
             if (lastNode.filter(textNodeFilter).length) {
@@ -413,7 +416,7 @@
                     var containerElement, containerData;
 
                     containerElement = $(this);
-                    containerData = containerElement.data();
+                    containerData = containerElement.data('jqae');
 
                     // If container element dimensions have changed, or the container element is new, run ellipsis on
                     // that container element.
