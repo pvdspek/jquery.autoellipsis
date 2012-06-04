@@ -194,7 +194,7 @@
                         // If ellipsis was succesfully applied, remove any remaining empty last elements and append the
                         // ellipsis characters.
                         if (ellipsisApplied) {
-                            removeLastEmptyElements(selectedElement);
+                            while(removeLastEmptyElements(selectedElement)) {}
 
                             // If the selected element is not empty, append the ellipsis characters.
                             if (selectedElement.contents().length) {
