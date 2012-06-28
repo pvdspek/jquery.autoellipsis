@@ -187,7 +187,7 @@
                     }
 
                     // Iterate until wrapper element height is less than or equal to the container element height.
-                    while (wrapperElement.innerHeight() > containerElement.innerHeight()) {
+                    while (wrapperElement.innerHeight() > containerElement.height()) {
                         // Apply ellipsis on last text node, by removing one word.
                         ellipsisApplied = ellipsisOnLastTextNode(selectedElement);
 
