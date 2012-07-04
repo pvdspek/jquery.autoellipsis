@@ -150,8 +150,8 @@
         // width and height are stored to detect changes to the container size.
         containerElement.data('jqae', {
             wrapperElement: wrapperElement,
-            containerWidth: containerElement.innerWidth(),
-            containerHeight: containerElement.innerHeight()
+            containerWidth: containerElement.width(),
+            containerHeight: containerElement.height()
         });
 
 
@@ -169,8 +169,9 @@
                     originalText = selectedElement.text(),
                     ellipsisApplied = false;
 
-            // Check if we can safely remove the selected element. This saves a lot of unnecessary iterations.
-            if (wrapperElement.innerHeight() - selectedElement.innerHeight() > containerElement.innerHeight()) {
+            // Check if we can safely remove the selected element. This saves a lot of unnecessary iterations. Add one
+            // pixel allowance because of bug in height() calculation on max-height boxes ie iE.
+            if (wrapperElement.height() - selectedElement.height() > containerElement.height() + 1) {
                 selectedElement.remove();
 
             } else {
@@ -186,8 +187,9 @@
                         deferAppendEllipsis = false;
                     }
 
-                    // Iterate until wrapper element height is less than or equal to the container element height.
-                    while (wrapperElement.innerHeight() > containerElement.height()) {
+                    // Iterate until wrapper element height is less than or equal to the container element height. Add one
+                    // pixel allowance because of bug in height() calculation on max-height boxes in IE.
+                    while (wrapperElement.height() > containerElement.height() + 1) {
                         // Apply ellipsis on last text node, by removing one word.
                         ellipsisApplied = ellipsisOnLastTextNode(selectedElement);
 
@@ -420,8 +422,8 @@
 
                     // If container element dimensions have changed, or the container element is new, run ellipsis on
                     // that container element.
-                    if ((containerData.containerWidth != containerElement.innerWidth()) ||
-                            (containerData.containerHeight != containerElement.innerHeight())) {
+                    if ((containerData.containerWidth != containerElement.width()) ||
+                            (containerData.containerHeight != containerElement.height())) {
                         ellipsisOnElement(containerElement, liveUpdatingTargetSelectors[targetSelector]);
                     }
                 });
