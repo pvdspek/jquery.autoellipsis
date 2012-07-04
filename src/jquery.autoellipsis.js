@@ -171,7 +171,7 @@
 
             // Check if we can safely remove the selected element. This saves a lot of unnecessary iterations. Add one
             // pixel allowance because of bug in height() calculation on max-height boxes ie iE.
-            if (wrapperElement.height() - selectedElement.height() > containerElement.height() + 1) {
+            if (wrapperElement.innerHeight() - selectedElement.innerHeight() > containerElement.height() + 1) {
                 selectedElement.remove();
 
             } else {
@@ -189,7 +189,7 @@
 
                     // Iterate until wrapper element height is less than or equal to the container element height. Add one
                     // pixel allowance because of bug in height() calculation on max-height boxes in IE.
-                    while (wrapperElement.height() > containerElement.height() + 1) {
+                    while (wrapperElement.innerHeight() > containerElement.height() + 1) {
                         // Apply ellipsis on last text node, by removing one word.
                         ellipsisApplied = ellipsisOnLastTextNode(selectedElement);
 
