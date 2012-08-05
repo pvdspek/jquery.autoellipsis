@@ -154,6 +154,11 @@
             containerHeight: containerElement.height()
         });
 
+        // Calculate with current container element height.
+        var containerElementHeight = containerElement.height();
+
+        // Calculate wrapper offset.
+        var wrapperOffset = parseInt(containerElement.css('padding-top'), 10) - (wrapperElement.offset().top - containerElement.offset().top);
 
         // Normally the ellipsis characters are applied to the last non-empty text-node in the selected element. If the
         // selected element becomes empty during ellipsis iteration, the ellipsis characters cannot be applied to that
@@ -169,9 +174,8 @@
                     originalText = selectedElement.text(),
                     ellipsisApplied = false;
 
-            // Check if we can safely remove the selected element. This saves a lot of unnecessary iterations. Add one
-            // pixel allowance because of bug in height() calculation on max-height boxes ie iE.
-            if (wrapperElement.innerHeight() - selectedElement.innerHeight() > containerElement.height() + 1) {
+            // Check if we can safely remove the selected element. This saves a lot of unnecessary iterations.
+            if (wrapperElement.innerHeight() - selectedElement.innerHeight() > containerElementHeight + wrapperOffset) {
                 selectedElement.remove();
 
             } else {
@@ -187,9 +191,9 @@
                         deferAppendEllipsis = false;
                     }
 
-                    // Iterate until wrapper element height is less than or equal to the container element height. Add one
-                    // pixel allowance because of bug in height() calculation on max-height boxes in IE.
-                    while (wrapperElement.innerHeight() > containerElement.height() + 1) {
+                    // Iterate until wrapper element height is less than or equal to the original container element
+                    // height plus possible wrapperOffset.
+                    while (wrapperElement.innerHeight() > containerElementHeight + wrapperOffset) {
                         // Apply ellipsis on last text node, by removing one word.
                         ellipsisApplied = ellipsisOnLastTextNode(selectedElement);
 
