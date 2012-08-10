@@ -158,7 +158,7 @@
         var containerElementHeight = containerElement.height();
 
         // Calculate wrapper offset.
-        var wrapperOffset = parseInt(containerElement.css('padding-top'), 10) - (wrapperElement.offset().top - containerElement.offset().top);
+        var wrapperOffset = parseInt(containerElement.css('padding-top'), 10) + parseInt(containerElement.css('border-top-width'), 10) - (wrapperElement.offset().top - containerElement.offset().top);
 
         // Normally the ellipsis characters are applied to the last non-empty text-node in the selected element. If the
         // selected element becomes empty during ellipsis iteration, the ellipsis characters cannot be applied to that
