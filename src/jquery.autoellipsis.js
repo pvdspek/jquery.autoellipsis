@@ -126,6 +126,13 @@
         // If not, create wrapper element.
         if (!wrapperElement) {
             wrapperElement = containerElement.wrapInner('<div/>').find('>div');
+
+            // Wrapper div should not add extra size.
+            wrapperElement.css({
+                margin: 0,
+                padding: 0,
+                border: 0
+            });
         }
 
         // Check if the original wrapper element content was already bound to the wrapper element.
