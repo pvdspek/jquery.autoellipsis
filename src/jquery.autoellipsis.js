@@ -59,7 +59,8 @@
     var defaultSettings = {
                 ellipsis: '...',
                 setTitle: 'never',
-                live: false
+                live: false,
+                callback: undefined
             };
 
     /**
@@ -240,6 +241,11 @@
                     } else if (settings.setTitle != 'never') {
                         selectedElement.removeAttr('title');
                     }
+
+                    // call callback function if set
+                    if (!!settings.callback) {
+                        settings.callback.call(containerElement, ellipsisApplied);
+                    }
                 }
             }
         });
@@ -267,7 +273,7 @@
                 lastTextNode.get(0).nodeValue = text;
 
             } else {
-                lastTextNode.get(0).nodeValue = '';
+                lastTextNode.remove();
             }
 
             return true;
