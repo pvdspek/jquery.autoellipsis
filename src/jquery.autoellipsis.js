@@ -267,7 +267,7 @@
                 lastTextNode.get(0).nodeValue = text;
 
             } else {
-                lastTextNode.get(0).nodeValue = '';
+                lastTextNode.remove();
             }
 
             return true;
