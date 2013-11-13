@@ -201,8 +201,9 @@
                     // Iterate until wrapper element height is less than or equal to the original container element
                     // height plus possible wrapperOffset.
                     while (wrapperElement.innerHeight() > containerElementHeight + wrapperOffset) {
+
                         // Apply ellipsis on last text node, by removing one word.
-                        ellipsisApplied = ellipsisOnLastTextNode(selectedElement);
+                        ellipsisApplied = ellipsisOnLastTextNode(selectedElement, settings.ellipsis);
 
                         // If ellipsis was succesfully applied, remove any remaining empty last elements and append the
                         // ellipsis characters.
@@ -252,22 +253,47 @@
      * @return {boolean} true when ellipsis has been done, false otherwise.
      * @private
      */
-    function ellipsisOnLastTextNode(element) {
+    function ellipsisOnLastTextNode(element, ellipsis) {
         var lastTextNode = getLastTextNode(element);
 
         // If the last text node is found, do ellipsis on that node.
         if (lastTextNode.length) {
             var text = lastTextNode.get(0).nodeValue;
 
-            // Find last space character, and remove text from there. If no space is found the full remaining text is
-            // removed.
-            var pos = text.lastIndexOf(' ');
-            if (pos > -1) {
-                text = $.trim(text.substring(0, pos));
-                lastTextNode.get(0).nodeValue = text;
+            // Find last word-break character, and remove text from there. If no space is found, the last character of the
+            // word is removed.
+            var wordBreakCharacters = [
+                ' ', // Regular white space.
+                '-', // Dash.
+                '\u2013', // En dash.
+                '\u2014', // Em dash.
+                '\u00AD', // Soft Hyphen.
+                '\u2011', // Non-breaking hyphen.
+                '\u2060', // Word joiner.
+                '\u200B', // Zero-width space.
+            ];
+            var i;
+            var removed_last_word = false;
+            for (i = 0; i < wordBreakCharacters.length; ++i) {
+                var pos = text.lastIndexOf(wordBreakCharacters[i]);
+                if (pos > -1) {
+                    text = $.trim(text.substring(0, pos));
+                    lastTextNode.get(0).nodeValue = text;
+                    removed_last_word = true;
+                    break;
+                }
+            }
+            if (!removed_last_word) {
 
-            } else {
-                lastTextNode.get(0).nodeValue = '';
+                // We may be checking a string that has already had a last character removed, if so the ellipsis will
+                // have already been added by the calling function, in which case we must remove it here again.
+                if (text.indexOf(ellipsis, text.length - ellipsis.length) !== -1) {
+                    text = $.trim(text.substring(0, text.length - ellipsis.length));
+                }
+
+                // Remove one letter from the end.
+                text = $.trim(text.substring(0, text.length - 1));
+                lastTextNode.get(0).nodeValue = text;
             }
 
             return true;
@@ -329,7 +355,7 @@
                 var text = lastNode.get(0).nodeValue;
                 text = $.trim(text);
 
-                if (text == '') {
+                if (text === '') {
                     // If empty, remove the text node.
                     lastNode.remove();
 
@@ -354,7 +380,7 @@
                     return true;
                 }
             }
-        }   
+        }
 
         return false;
     }
