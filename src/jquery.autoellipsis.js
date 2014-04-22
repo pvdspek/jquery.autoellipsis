@@ -263,7 +263,7 @@
             // removed.
             var pos = text.lastIndexOf(' ');
             if (pos > -1) {
-                text = $.trim(text.substring(0, pos));
+                text = text.substring(0, pos).replace(/\s+$/, "");
                 lastTextNode.get(0).nodeValue = text;
 
             } else {
@@ -327,7 +327,7 @@
             // If last child node is a text node, check for emptiness.
             if (lastNode.filter(textNodeFilter).length) {
                 var text = lastNode.get(0).nodeValue;
-                text = $.trim(text);
+                text = text.replace(/\s+$/, "");  // only trim right side
 
                 if (text == '') {
                     // If empty, remove the text node.
